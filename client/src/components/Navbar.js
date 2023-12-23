@@ -15,7 +15,6 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
-import { FaGoogle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const Links = [
@@ -76,14 +75,8 @@ export default function Navbar() {
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
-            <Button
-              variant={"solid"}
-              colorScheme={"red"}
-              size={"sm"}
-              mr={4}
-              leftIcon={<FaGoogle />}
-            >
-              Google Login
+            <Button variant={"solid"} colorScheme={"red"} size={"sm"} mr={4}>
+              Log out
             </Button>
             <Menu>
               <MenuButton
