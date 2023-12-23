@@ -78,7 +78,7 @@ export default function Navbar() {
           <Flex alignItems={"center"}>
             <Button
               variant={"solid"}
-              colorScheme={"blue"}
+              colorScheme={"red"}
               size={"sm"}
               mr={4}
               leftIcon={<FaGoogle />}
