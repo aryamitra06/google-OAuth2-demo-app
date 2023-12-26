@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
 import Posts from "./pages/Posts";
+import axios from "axios";
 import {
   BrowserRouter as Router,
   Route,
@@ -11,25 +12,50 @@ import {
 import Auth from "./pages/Auth";
 
 function App() {
-  const user = false;
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8443/api/user", {
+          withCredentials: true,
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(userData);
+
+  const isUserLoggedIn = userData?.isLoggedIn;
   return (
     <Router>
-      <Navbar />
+      <Navbar userData={userData} />
       <Routes>
         <Route
           exact
-          path="/posts"
-          element={user ? <Posts /> : <Navigate to={"/auth"} />}
+          path="/"
+          element={
+            isUserLoggedIn ? (
+              <Home userData={userData} />
+            ) : (
+              <Navigate to={"/auth"} />
+            )
+          }
         />
         <Route
           exact
-          path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to={"/auth"} />}
+          path="/posts"
+          element={isUserLoggedIn ? <Posts /> : <Navigate to={"/auth"} />}
         />
         <Route
           exact
           path="/auth"
-          element={user ? <Navigate to={"/"} /> : <Auth />}
+          element={!isUserLoggedIn ? <Auth /> : <Navigate to={"/"} />}
         />
       </Routes>
     </Router>

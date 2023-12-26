@@ -1,10 +1,15 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
 
 export default function Auth() {
+
+  const googleLogin = () => {
+    window.open("http://localhost:8443/api/auth/google/login", "_self")
+  }
+  
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         justifyContent: "center",
@@ -17,9 +22,10 @@ export default function Auth() {
         colorScheme={"red"}
         size={"md"}
         leftIcon={<FaGoogle />}
+        onClick={googleLogin}
       >
         Sign in with Google
       </Button>
-    </div>
+    </Box>
   );
 }

@@ -19,8 +19,8 @@ import { Link } from "react-router-dom";
 
 const Links = [
   {
-    title: "Dashboard",
-    link: "/dashboard",
+    title: "Home",
+    link: "/",
   },
   {
     title: "Posts",
@@ -28,26 +28,14 @@ const Links = [
   },
 ];
 
-const NavLink = (props) => {
-  const { children } = props;
-  return (
-    <Box
-      as="a"
-      px={2}
-      py={1}
-      rounded={"md"}
-      _hover={{
-        textDecoration: "none",
-        bg: useColorModeValue("gray.200", "gray.700"),
-      }}
-    >
-      {children}
-    </Box>
-  );
-};
-
-export default function Navbar() {
+export default function Navbar({ userData }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const googleLogout = () => {
+    window.open("http://localhost:8443/api/auth/google/logout", "_self");
+  };
+
+  const isUserLoggedIn = userData?.isLoggedIn;
 
   return (
     <>
@@ -68,47 +56,58 @@ export default function Navbar() {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map(({ title, link }) => (
-                <Link to={link}>
-                  <NavLink key={link}>{title}</NavLink>
+                <Link to={link} key={link}>
+                  {title}
                 </Link>
               ))}
             </HStack>
           </HStack>
           <Flex alignItems={"center"}>
-            <Button variant={"solid"} colorScheme={"red"} size={"sm"} mr={4}>
-              Log out
-            </Button>
-            <Menu>
-              <MenuButton
-                as={Button}
-                rounded={"full"}
-                variant={"link"}
-                cursor={"pointer"}
-                minW={0}
-              >
-                <Avatar
+            {isUserLoggedIn && (
+              <>
+                <Button
+                  variant={"solid"}
+                  colorScheme={"red"}
                   size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Link 1</MenuItem>
-                <MenuItem>Link 2</MenuItem>
-                <MenuDivider />
-                <MenuItem>Link 3</MenuItem>
-              </MenuList>
-            </Menu>
+                  mr={4}
+                  onClick={googleLogout}
+                >
+                  Log out
+                </Button>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
+                    <Avatar
+                      size={"sm"}
+                      src={userData?.user?.photos[0]?.value}
+                      referrerPolicy="no-referrer"
+                    />
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem>{userData?.user?.displayName}</MenuItem>
+                    <MenuDivider />
+                    <MenuItem>{userData?.user?.emails[0]?.value}</MenuItem>
+                    <MenuItem>
+                      Email Verified:{" "}
+                      {userData?.user?.emails[0]?.verified ? "YES" : "NO"}
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </>
+            )}
           </Flex>
         </Flex>
-
         {isOpen ? (
           <Box pb={4} display={{ md: "none" }}>
             <Stack as={"nav"} spacing={4}>
               {Links.map(({ title, link }) => (
-                <Link to={link}>
-                  <NavLink key={link}>{title}</NavLink>
+                <Link to={link} key={link}>
+                  {title}
                 </Link>
               ))}
             </Stack>
