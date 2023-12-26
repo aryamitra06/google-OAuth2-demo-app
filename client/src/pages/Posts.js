@@ -30,8 +30,6 @@ export default function Posts() {
     fetchData();
   }, []);
 
-  console.log(data);
-
   return (
     <Box p={4}>
       <SimpleGrid spacing={4} columns={[1, null, 2]}>
